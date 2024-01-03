@@ -1,0 +1,72 @@
+
+There are no discarded input sections
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00100000         xr
+SRAM             0x20000000         0x00020000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD hello_world.o
+
+.text           0x08000000       0x20
+ *(.isr_vector)
+ *(.text)
+ .text          0x08000000       0x1a hello_world.o
+                0x08000000                main
+                0x0800000e                Reset_Handler
+ *(.rodata)
+ *fill*         0x0800001a        0x2 
+ .rodata        0x0800001c        0x4 hello_world.o
+                0x0800001c                var3
+                0x08000020                        _etext = .
+                0x08000020                        _la_data = LOADADDR (.data)
+
+.glue_7         0x08000020        0x0
+ .glue_7        0x08000020        0x0 linker stubs
+
+.glue_7t        0x08000020        0x0
+ .glue_7t       0x08000020        0x0 linker stubs
+
+.vfp11_veneer   0x08000020        0x0
+ .vfp11_veneer  0x08000020        0x0 linker stubs
+
+.v4_bx          0x08000020        0x0
+ .v4_bx         0x08000020        0x0 linker stubs
+
+.iplt           0x08000020        0x0
+ .iplt          0x08000020        0x0 hello_world.o
+
+.rel.dyn        0x08000020        0x0
+ .rel.iplt      0x08000020        0x0 hello_world.o
+
+.data           0x20000000        0x1 load address 0x08000020
+                0x20000000                        _sdata = .
+ *(.data)
+ .data          0x20000000        0x1 hello_world.o
+                0x20000000                var1
+                0x20000001                        _edata = .
+
+.igot.plt       0x20000004        0x0 load address 0x08000021
+ .igot.plt      0x20000004        0x0 hello_world.o
+
+.bss            0x20000004        0x4 load address 0x08000021
+                0x20000004                        _sbss = .
+ *(.bss)
+ .bss           0x20000004        0x4 hello_world.o
+                0x20000004                var2
+                0x20000008                        _ebss = .
+OUTPUT(hello_world.elf elf32-littlearm)
+LOAD linker stubs
+
+.comment        0x00000000       0x44
+ .comment       0x00000000       0x44 hello_world.o
+                                 0x45 (size before relaxing)
+
+.ARM.attributes
+                0x00000000       0x2e
+ .ARM.attributes
+                0x00000000       0x2e hello_world.o
